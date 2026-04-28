@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    Int    @id @default(autoincrement())
+  googleId String? @unique
+  email String? @unique
+  session session[]
+}
+
+model session{
+  id Int @id @default(autoincrement())
+  user_id Int
+  token String @unique
+   expiresAt DateTime
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
